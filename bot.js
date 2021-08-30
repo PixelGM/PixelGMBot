@@ -1,6 +1,9 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
+//Webserver check | https://pixelgmbot.pixelgm.repl.co/
+require("http").createServer((_, res) => res.end("Alive!")).listen(8080)
+
 client.on("ready", () => {
     console.log("I am ready!");
 });
@@ -276,4 +279,5 @@ client.on("message", message => {
 });
 
 // THIS  MUST  BE  THIS  WAY
-client.login(process.env.BOT_TOKEN);
+client.login(process.env.BOT_TOKEN
+);
