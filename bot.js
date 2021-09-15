@@ -1,8 +1,6 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
-
-//Webserver check | https://pixelgmbot.pixelgm.repl.co/
-require("http").createServer((_, res) => res.end("Alive!")).listen(8080)
+const keepAlive = require("./server")
 
 client.on("ready", () => {
     console.log("I am ready!");
@@ -277,6 +275,8 @@ client.on("message", message => {
         message.channel.send("https://tenor.com/view/freaking-out-kermit-gif-8832122");
     }
 });
+
+keepAlive()
 
 // THIS  MUST  BE  THIS  WAY
 client.login(process.env.BOT_TOKEN
