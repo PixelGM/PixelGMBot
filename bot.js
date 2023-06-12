@@ -8,6 +8,8 @@ client.on("ready", () => {
 
 const prefix = "`";
 const prefix2 = "'";
+const args = message.content.slice(prefix.length).trim().split(/ +/g);
+
 client.on("message", message => {
     var msg = message.content.toLowerCase();
     var mention = message.mentions.users.first();
@@ -108,54 +110,42 @@ client.on("message", message => {
         }
     }
     
-    //Sensum Github
-    if (msg.startsWith(prefix + "github") || msg.startsWith(prefix + "sensum")){
-        if (message.guild.id == '642973675028480041'){
-            message.channel.send("https://github.com/martinjanas/Sensum")
-        }
-    }
-    
-    //Paster's Roast
-    //Dll Asking Blacklist
-    //how, where, give, pls, plis, please, ples (retardedquestions)
-    if (retardedquestions.some(word => message.content.toLowerCase().includes(word)) && message.content.toLowerCase().includes("dll")){
-        if (message.guild.id == '642973675028480041'){
-            if(message.author.bot) return;
-            var fullUsername = message.author.tag
-            client.channels.get(`765811918371160095`).send(fullUsername + " has asked for dll");
-        }
+    // Kick
+    if (msg.startsWith(prefix + "kick") || msg.startsWith(prefix2 + "kick")){
+        if(!message.member.hasPermission('KICK_MEMBERS')) 
+            return message.reply("You don't have permission to use that command!");
+        let member = message.mentions.members.first();
+        if(!member)
+            return message.reply("Please mention a valid member of this server");
+        if(!member.kickable) 
+            return message.reply("I cannot kick this user! They might have a higher role or I might not have kick permissions.");
+
+        let reason = args.slice(1).join(' ');
+        if(!reason) reason = "No reason provided";
+
+        member.kick(reason)
+            .catch(error => message.reply(`Sorry ${message.author} I couldn't kick because of : ${error}`));
+        message.reply(`${member.user.tag} has been kicked by ${message.author.tag} because: ${reason}`);
     }
 
-    //How to Compile
-    //how, where, give, pls, plis, please, ples (retardedquestions)
-    if (retardedquestions.some(word => message.content.toLowerCase().includes(word)) && message.content.toLowerCase().includes("compile")){
-        if (message.guild.id == '642973675028480041'){
-            if(message.author.bot) return;
-            if(message.content.toLowerCase().includes("stop")) return;
-            var fullUsername = message.author.tag
-            client.channels.get(`765811918371160095`).send(fullUsername + " has asked how to compile sensum");
-        }
+    // Ban
+    if (msg.startsWith(prefix + "ban") || msg.startsWith(prefix2 + "ban")){
+        if(!message.member.hasPermission('BAN_MEMBERS')) 
+            return message.reply("You don't have permission to use that command!");
+        let member = message.mentions.members.first();
+        if(!member)
+            return message.reply("Please mention a valid member of this server");
+        if(!member.bannable) 
+            return message.reply("I cannot ban this user! They might have a higher role or I might not have ban permissions.");
+
+        let reason = args.slice(1).join(' ');
+        if(!reason) reason = "No reason provided";
+
+        member.ban({reason: reason})
+            .catch(error => message.reply(`Sorry ${message.author} I couldn't ban because of : ${error}`));
+        message.reply(`${member.user.tag} has been banned by ${message.author.tag} because: ${reason}`);
     }
 
-    //CFG Asking
-    if (retardedquestions.some(word => message.content.toLowerCase().includes(word)) && message.content.toLowerCase().includes("cfg")){
-        if (message.guild.id == '642973675028480041'){
-            if(message.author.bot) return;
-            if(message.content.toLowerCase().includes("stop")) return;
-            var fullUsername = message.author.tag
-            client.channels.get(`765811918371160095`).send(fullUsername + " has asked a CFG question");
-        }
-    }
-
-    //D3D Error
-    if (message.content.toLowerCase().includes("d3d") && message.content.toLowerCase().includes("error") || message.content.toLowerCase().includes("d3d") && retardedquestions.some(word => message.content.toLowerCase().includes(word))){
-        if (message.guild.id == '642973675028480041'){
-            if(message.author.bot) return;
-            if(message.content.toLowerCase().includes("stop")) return;
-            var fullUsername = message.author.tag
-            client.channels.get(`765811918371160095`).send(fullUsername + " has asked about retarded D3D error");
-        }
-    }
 
     //https://discord.com/oauth2/authorize?client_id=703579067211055156&scope=bot&permissions=8
     //Bot Invite Link
