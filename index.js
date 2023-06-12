@@ -88,16 +88,34 @@ function handleSay(message) {
   message.channel.send(content);
 }
 
-function handleBan(message) {
-  const userToBan = message.mentions.users.first();
+async function handleBan(message) {
+  // get the user to be banned
+  const memberToBan = message.mentions.members.first();
+
+  // check if the author of the message has the necessary permissions
   if (!message.member.hasPermission("BAN_MEMBERS")) {
     return message.reply("You don't have permission to do that!");
   }
-  if (!userToBan) {
+
+  // check if a user was mentioned for the ban
+  if (!memberToBan) {
     return message.reply("You need to mention someone to ban them!");
   }
-  message.guild.members.ban(userToBan);
+
+  // ban the user
+  try {
+    await memberToBan.ban({reason: 'Your reason here'});
+    // if the ban was successful, send a message
+    message.reply(`Successfully banned ${memberToBan.user.username}`);
+  } catch (err) {
+    // if the ban was unsuccessful, log the error
+    console.error(err);
+    message.reply("I was unable to ban the user");
+  }
 }
+
+
+
 
 function handleKick(message) {
   const userToKick = message.mentions.users.first();
