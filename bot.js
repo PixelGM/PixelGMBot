@@ -8,9 +8,9 @@ client.on("ready", () => {
 
 const prefix = "`";
 const prefix2 = "'";
-const args = message.content.slice(prefix.length).trim().split(/ +/g);
 
 client.on("message", message => {
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
     var msg = message.content.toLowerCase();
     var mention = message.mentions.users.first();
     const swearWords = ["fuck", "bitch", "gay", "shit", "noob", "retard", "stupid", "bego", "asu"];
