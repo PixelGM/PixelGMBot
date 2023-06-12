@@ -89,8 +89,14 @@ function handleSay(message) {
 }
 
 async function handleBan(message) {
+  // split the message content into words
+  const args = message.content.split(' ');
+
+  // remove the first word (the command itself)
+  args.shift();
+
   // get the user to be banned
-  const memberToBan = message.mentions.members.first();
+  const userToBan = message.mentions.users.first();
 
   // check if the author of the message has the necessary permissions
   if (!message.member.hasPermission("BAN_MEMBERS")) {
@@ -98,15 +104,24 @@ async function handleBan(message) {
   }
 
   // check if a user was mentioned for the ban
-  if (!memberToBan) {
+  if (!userToBan) {
     return message.reply("You need to mention someone to ban them!");
   }
 
+  // remove the mention from the args
+  args.shift();
+
+  // join the remaining words to form the reason
+  const reason = args.join(' ');
+
+  // get the member object for the user to be banned
+  let memberToBan = message.guild.members.cache.get(userToBan.id);
+
   // ban the user
   try {
-    await memberToBan.ban({reason: 'Your reason here'});
+    await memberToBan.ban({reason});
     // if the ban was successful, send a message
-    message.reply(`Successfully banned ${memberToBan.user.username}`);
+    message.reply(`Successfully banned ${userToBan.username} for reason: ${reason}`);
   } catch (err) {
     // if the ban was unsuccessful, log the error
     console.error(err);
@@ -151,7 +166,6 @@ async function handleKick(message) {
     message.reply("I was unable to kick the user");
   }
 }
-
 
 function handleInvite(message) {
   message.channel.createInvite({maxAge: 0})
