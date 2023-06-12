@@ -114,10 +114,13 @@ async function handleBan(message) {
   }
 }
 
-
-
-
 async function handleKick(message) {
+  // split the message content into words
+  const args = message.content.split(' ');
+
+  // remove the first word (the command itself)
+  args.shift();
+
   // get the user to be kicked
   const memberToKick = message.mentions.members.first();
 
@@ -131,11 +134,17 @@ async function handleKick(message) {
     return message.reply("You need to mention someone to kick them!");
   }
 
+  // remove the mention from the args
+  args.shift();
+
+  // join the remaining words to form the reason
+  const reason = args.join(' ');
+
   // kick the user
   try {
-    await memberToKick.kick('Your reason here');
+    await memberToKick.kick(reason);
     // if the kick was successful, send a message
-    message.reply(`Successfully kicked ${memberToKick.user.username}`);
+    message.reply(`Successfully kicked ${memberToKick.user.username} for reason: ${reason}`);
   } catch (err) {
     // if the kick was unsuccessful, log the error
     console.error(err);
