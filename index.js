@@ -117,16 +117,32 @@ async function handleBan(message) {
 
 
 
-function handleKick(message) {
-  const userToKick = message.mentions.users.first();
+async function handleKick(message) {
+  // get the user to be kicked
+  const memberToKick = message.mentions.members.first();
+
+  // check if the author of the message has the necessary permissions
   if (!message.member.hasPermission("KICK_MEMBERS")) {
     return message.reply("You don't have permission to do that!");
   }
-  if (!userToKick) {
+
+  // check if a user was mentioned for the kick
+  if (!memberToKick) {
     return message.reply("You need to mention someone to kick them!");
   }
-  message.guild.members.kick(userToKick);
+
+  // kick the user
+  try {
+    await memberToKick.kick('Your reason here');
+    // if the kick was successful, send a message
+    message.reply(`Successfully kicked ${memberToKick.user.username}`);
+  } catch (err) {
+    // if the kick was unsuccessful, log the error
+    console.error(err);
+    message.reply("I was unable to kick the user");
+  }
 }
+
 
 function handleInvite(message) {
   message.channel.createInvite({maxAge: 0})
