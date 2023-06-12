@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
-const { Client, Intents } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.Guilds, Intents.FLAGS.GuildMessages] });
+const client = new Discord.Client();
 const keepAlive = require("./server");
 
 const prefix1 = "`";
