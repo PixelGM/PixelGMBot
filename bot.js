@@ -110,40 +110,46 @@ client.on("message", message => {
         }
     }
     
-    // Kick
-    if (msg.startsWith(prefix + "kick") || msg.startsWith(prefix2 + "kick")){
-        if(!message.member.hasPermission('KICK_MEMBERS')) 
-            return message.reply("You don't have permission to use that command!");
-        let member = message.mentions.members.first();
-        if(!member)
-            return message.reply("Please mention a valid member of this server");
-        if(!member.kickable) 
-            return message.reply("I cannot kick this user! They might have a higher role or I might not have kick permissions.");
-
-        let reason = args.slice(1).join(' ');
-        if(!reason) reason = "No reason provided";
-
-        member.kick(reason)
-            .catch(error => message.reply(`Sorry ${message.author} I couldn't kick because of : ${error}`));
-        message.reply(`${member.user.tag} has been kicked by ${message.author.tag} because: ${reason}`);
-    }
-
     // Ban
-    if (msg.startsWith(prefix + "ban") || msg.startsWith(prefix2 + "ban")){
+    if(msg === "ban") {
         if(!message.member.hasPermission('BAN_MEMBERS')) 
-            return message.reply("You don't have permission to use that command!");
-        let member = message.mentions.members.first();
-        if(!member)
-            return message.reply("Please mention a valid member of this server");
-        if(!member.bannable) 
-            return message.reply("I cannot ban this user! They might have a higher role or I might not have ban permissions.");
-
-        let reason = args.slice(1).join(' ');
-        if(!reason) reason = "No reason provided";
-
-        member.ban({reason: reason})
-            .catch(error => message.reply(`Sorry ${message.author} I couldn't ban because of : ${error}`));
-        message.reply(`${member.user.tag} has been banned by ${message.author.tag} because: ${reason}`);
+            return message.reply("You don't have permission to use that command.");
+        
+        let user = message.mentions.users.first();
+  
+        if(!user) 
+            return message.reply("Please mention someone to ban.");
+  
+        if(!message.guild.member(user).bannable) 
+            return message.reply("I cannot ban that user. Do they have a higher role? Do I have ban permissions?");
+  
+        message.guild.member(user).ban().then(() => {
+            message.reply(`${user.tag} was banned.`);
+        }).catch(err => {
+            message.reply("I was unable to ban the user.");
+            console.error(err);
+        });
+    }
+    
+    // Kick
+    if(msg === "kick") {
+        if(!message.member.hasPermission('KICK_MEMBERS')) 
+            return message.reply("You don't have permission to use that command.");
+        
+        let user = message.mentions.users.first();
+  
+        if(!user) 
+            return message.reply("Please mention someone to kick.");
+  
+        if(!message.guild.member(user).kickable) 
+            return message.reply("I cannot kick that user. Do they have a higher role? Do I have kick permissions?");
+  
+        message.guild.member(user).kick().then(() => {
+            message.reply(`${user.tag} was kicked.`);
+        }).catch(err => {
+            message.reply("I was unable to kick the user.");
+            console.error(err);
+        });
     }
 
 
