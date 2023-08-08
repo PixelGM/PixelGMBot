@@ -1,10 +1,7 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const keepAlive = require("./server");
-const CombineStory = require("./CombineStory");
 const handleStory = require("./handleStory");
-
-const storyCollector = new CombineStory();
 
 client.on("ready", () => {
   console.log("I am ready!");
