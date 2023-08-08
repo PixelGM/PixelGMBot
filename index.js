@@ -20,15 +20,6 @@ client.on("message", message => {
 
   // Define content variable here
   const content = message.content.trim().toLowerCase();
-
-  if (content === "!start") {
-    storyCollector.start();
-  } else if (content === "!summarize") {
-    const summary = storyCollector.summarize();
-    message.reply(summary);
-  } else if (storyCollector.isCollecting) {
-    storyCollector.addWord(content);
-  }
 });
 
 keepAlive();
