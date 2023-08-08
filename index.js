@@ -1,6 +1,10 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const keepAlive = require("./server");
+const CombineStory = require("./CombineStory");
+const handleStory = require("./handleStory");
+
+const storyCollector = new CombineStory();
 
 client.on("ready", () => {
   console.log("I am ready!");
@@ -8,7 +12,23 @@ client.on("ready", () => {
 
 client.on("message", message => {
   if (message.author.bot) return;
-  message.reply("Hello, World!");
+
+  // Summarize Story ----------------------------------------
+
+  // Check Message if more than 1 word
+  handleStory(message);
+
+  // Define content variable here
+  const content = message.content.trim().toLowerCase();
+
+  if (content === "!start") {
+    storyCollector.start();
+  } else if (content === "!summarize") {
+    const summary = storyCollector.summarize();
+    message.reply(summary);
+  } else if (storyCollector.isCollecting) {
+    storyCollector.addWord(content);
+  }
 });
 
 keepAlive();
