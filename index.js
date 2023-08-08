@@ -19,16 +19,16 @@ client.on("message", message => {
   handleStory(message);
 
   // Define content variable here
-  const content = message.content.trim().toLowerCase();
+  // const content = message.content.trim().toLowerCase();
 
-  if (content === "!start") {
-    storyCollector.start();
-  } else if (content === "!summarize") {
-    const summary = storyCollector.summarize();
-    message.reply(summary);
-  } else if (storyCollector.isCollecting) {
-    storyCollector.addWord(content);
-  }
+  // if (content === "!start") {
+  //   storyCollector.start();
+  // } else if (content === "!summarize") {
+  //   const summary = storyCollector.summarize();
+  //   message.reply(summary);
+  // } else if (storyCollector.isCollecting) {
+  //   storyCollector.addWord(content);
+  // }
 });
 
 keepAlive();
